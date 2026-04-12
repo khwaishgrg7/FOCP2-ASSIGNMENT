@@ -1,21 +1,46 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <string>
 using namespace std;
-const int MAXN = 1e7 + 1;
-int main(){
-    vector<int> omega(MAXN, 0);
-    for(int i = 2; i < MAXN; i++){
-        if(omega[i] == 0){ 
-            for(int j = i; j < MAXN; j += i){
-                omega[j]++;
-            }
+
+
+bool canTurnOffAllBulbs(int size, int maxOps, const string& bulbs, int winSize) {
+    int opsUsed = 0;
+
+    for (int i = 0; i < size; ) {
+        if (bulbs[i] == '1') {
+            opsUsed++;
+            i += winSize;
+        } else {
+            i++; 
         }
     }
-    int T;
-    scanf("%d", &T);
-    while(T--){
-        int n;
-        scanf("%d", &n);
-        printf("%d\n", 1 << omega[n]);
+
+    return opsUsed <= maxOps;
+}
+
+int main() {
+    int size, maxOps;
+    cin >> size >> maxOps;
+
+    string bulbs;
+    cin >> bulbs;
+
+ 
+    int lo = 1;
+    int hi = size;
+    int minWin = size;  
+
+    while (lo <= hi) {
+        int mid = (lo + hi) / 2;
+
+        if (canTurnOffAllBulbs(size, maxOps, bulbs, mid)) {
+            minWin = mid;  
+            hi = mid - 1;
+        } else {
+            lo = mid + 1;  
+        }
     }
+
+    cout << minWin << endl;
     return 0;
 }
